@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChromeOS Sim</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background-color: var(--bg-color);
+        }
+        :root {
+            --bg-color: #3c9eff; /* Fresh blue background */
+        }
+        .boot-screen {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: fadeOut 3s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .apps {
+            display: flex;
+            gap: 10px;
+            margin-left: 10px;
+        }
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .search-bar {
+            margin-left: auto;
+            margin-right: 10px;
+        }
+        .search-input {
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        .app-window {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .crash-screen {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            color: black;
+            text-align: center;
+            padding-top: 10%;
+            font-size: 24px;
+        }
+        .snap-icon {
+            font-size: 80px;
+        }
+        .close-btn {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="boot-screen">
+        <p>ChromeOS</p>
+        <p>Loading...</p>
+    </div>
+
+    <div class="taskbar">
+        <div class="apps">
+            <div class="app-icon" onclick="openWindow('settings')">⚙️</div>
+            <div class="app-icon" onclick="fakeCrash()">🌍</div>
+            <div class="app-icon" onclick="openWindow('files')">📁</div>
+        </div>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search..." onkeypress="search(event)">
+        </div>
+    </div>
+
+    <div class="app-window" id="settings">
+        <h2>Settings</h2>
+        <button class="close-btn" onclick="closeWindow('settings')">Close</button>
+    </div>
+
+    <div class="app-window" id="files">
+        <h2>Files</h2>
+        <p>Fake file manager window</p>
+        <button class="close-btn" onclick="closeWindow('files')">Close</button>
+    </div>
+
+    <div class="crash-screen" id="crash">
+        <p class="snap-icon">💀</p>
+        <p><strong>Aw, Snap!</strong></p>
+        <p>Something went wrong while displaying this page.</p>
+        <button class="close-btn" id="reloadBtn" onclick="returnToDesktop()">Reload</button>
+    </div>
+
+    <script>
+        let refreshCount = 0;
+
+        function openWindow(app) {
+            document.getElementById(app).style.display = "block";
+        }
+
+        function closeWindow(app) {
+            document.getElementById(app).style.display = "none";
+        }
+
+        function search(event) {
+            if (event.key === "Enter") {
+                alert("Searching for: " + event.target.value);
+            }
+        }
+
+        function fakeCrash() {
+            document.getElementById("crash").style.display = "block";
+            document.getElementById("reloadBtn").style.display = "none"; // Hide reload button when crashed
+        }
+
+        function returnToDesktop() {
+            document.getElementById("crash").style.display = "none";
+            document.getElementById("reloadBtn").style.display = "block"; // Restore reload button
+            refreshCount = 0;
+        }
+    </script>
+
+</body>
+</html>
